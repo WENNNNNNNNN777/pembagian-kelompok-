@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembagian Kelompok</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            padding: 15px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 20px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 0.85rem;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: #2d3748;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-title i {
+            color: #667eea;
+        }
+
+        /* Mode */
+        .mode-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f7fafc;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .mode-btn:hover {
+            background: #edf2f7;
+        }
+
+        .mode-btn.active {
+            border-color: #667eea;
+            background: #ebf4ff;
+            color: #667eea;
+        }
+
+        .mode-btn i {
+            display: block;
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #2d3748;
+            font-size: 0.85rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-row input,
+        .form-row select {
+            flex: 1;
+            padding: 10px 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-row input:focus,
+        .form-row select:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row input[type="number"] {
+            max-width: 120px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #fc8181;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #f56565;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #e2e8f0;
+            color: #4a5568;
+        }
+        .btn-outline:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+        .btn-block {
+            width: 100%;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Ketua List */
+        .ketua-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 6px;
+            margin: 8px 0;
+        }
+
+        .ketua-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f7fafc;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+            font-size: 0.85rem;
+        }
+
+        .ketua-item .remove-btn {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: #fc8181;
+            cursor: pointer;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        .ketua-item .remove-btn:hover {
+            background: #fff5f5;
+        }
+
+        .badge {
+            background: #667eea;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: auto;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            color: #718096;
+            text-align: center;
+            margin: 6px 0;
+        }
+
+        /* Hasil */
+        .group-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .group-header {
+            background: #667eea;
+            color: white;
+            padding: 8px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .group-header .group-stats {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            display: flex;
+            gap: 10px;
+        }
+
+        .group-body {
+            padding: 10px 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            background: #fafafa;
+        }
+
+        .member-chip {
+            padding: 4px 10px;
+            border-radius: 14px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .member-chip.ketua {
+            border: 2px solid #f6ad55;
+            background: #fffaf0;
+        }
+
+        .member-chip.female {
+            background: #fff5f7;
+            border: 1px solid #fbb6ce;
+        }
+
+        .member-chip.male {
+            background: #ebf8ff;
+            border: 1px solid #90cdf4;
+        }
+
+        .member-chip .ketua-badge {
+            background: #f6ad55;
+            color: white;
+            padding: 0 5px;
+            border-radius: 8px;
+            font-size: 0.55rem;
+            font-weight: 700;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .stat-box {
+            background: #f7fafc;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-box .stat-number {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        .stat-box .stat-label {
+            font-size: 0.7rem;
+            color: #718096;
+        }
+
+        .alert {
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        .alert-info {
+            background: #ebf8ff;
+            border-left: 3px solid #4299e1;
+        }
+        .alert-warning {
+            background: #fffff0;
+            border-left: 3px solid #ecc94b;
+        }
+        .alert-success {
+            background: #f0fff4;
+            border-left: 3px solid #48bb78;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .mt-2 {
+            margin-top: 10px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+        .text-muted {
+            color: #a0aec0;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 16px;
+            color: #a0aec0;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 480px) {
+            .form-row {
+                flex-wrap: wrap;
+            }
+            .form-row input[type="number"] {
+                max-width: 100%;
+            }
+            .ketua-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            .stat-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-users"></i> Pembagian Kelompok</h1>
+            <p>Pilih mode, atur ketua (opsional), lalu SPIN!</p>
+        </div>
+
+        <!-- Mode -->
+        <div class="card">
+            <div class="card-title">
+                <i class="fas fa-cog"></i> Mode Pembagian
+            </div>
+            <div class="mode-group">
+                <div class="mode-btn active" data-mode="tanpa" onclick="setMode('tanpa')">
+                    <i class="fas fa-random"></i>
+                    Tanpa Ketua
+                </div>
+                <div class="mode-btn" data-mode="dengan" onclick="setMode('dengan')">
+                    <i class="fas fa-crown"></i>
+                    Dengan Ketua
+                </div>
+            </div>
+        </div>
+
+        <!-- Mode: Tanpa Ketua -->
+        <div id="modeTanpa" class="card">
+            <div class="card-title">
+                <i class="fas fa-sliders-h"></i> Pengaturan
+            </div>
+            <div class="form-group">
+                <label class="form-label">Jumlah Kelompok</label>
+                <input type="number" id="tanpaJumlah" value="9" min="2" max="36" style="width:100%; padding:10px 12px; border:2px solid #e2e8f0; border-radius:8px; font-size:0.9rem;">
+            </div>
+            <button class="btn btn-primary btn-block" onclick="spinTanpaKetua()">
+                <i class="fas fa-random"></i> SPIN!
+            </button>
+            <div id="tanpaHasil" class="mt-2"></div>
+        </div>
+
+        <!-- Mode: Dengan Ketua -->
+        <div id="modeDengan" class="card hidden">
+            <div class="card-title">
+                <i class="fas fa-crown"></i> Input Ketua
+                <span class="badge" id="ketuaProgress">0/9</span>
+            </div>
+
+            <!-- Input Form -->
+            <div class="form-row">
+                <input type="number" id="inputAbsen" placeholder="No. Absen" min="1" max="36">
+                <select id="inputGender">
+                    <option value="female">👩 Cewe</option>
+                    <option value="male">👨 Cowo</option>
+                </select>
+                <input type="number" id="inputKelompok" placeholder="Kelompok" min="1" max="9">
+                <button class="btn btn-success" onclick="tambahKetua()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <!-- Daftar Ketua -->
+            <div id="ketuaList" class="ketua-grid"></div>
+            <div class="progress-text" id="ketuaInfo">Belum ada ketua. Input 9 ketua untuk semua kelompok.</div>
+
+            <!-- Actions -->
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+                <button class="btn btn-danger btn-sm" onclick="hapusSemuaKetua()">
+                    <i class="fas fa-trash"></i> Hapus
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="isiOtomatis()">
+                    <i class="fas fa-magic"></i> Contoh 3♀ 6♂
+                </button>
+            </div>
+
+            <!-- Jumlah Kelompok -->
+            <div class="form-group mt-2">
+                <label class="form-label">Jumlah Kelompok</label>
+                <input type="number" id="denganJumlah" value="9" min="2" max="36" style="width:100%; padding:10px 12px; border:2px solid #e2e8f0; border-radius:8px; font-size:0.9rem;">
+            </div>
+
+            <!-- Spin -->
+            <button class="btn btn-primary btn-block" id="spinDenganBtn" onclick="spinDenganKetua()" disabled>
+                <i class="fas fa-random"></i> SPIN!
+            </button>
+            <div id="denganHasil" class="mt-2"></div>
+        </div>
+
+        <div class="footer">
+            <p>Ketua Kelas • Pembagian Kelompok Adil</p>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA ====================
+        const ALL = Array.from({ length: 36 }, (_, i) => i + 1);
+        const FEMALE = [6, 8, 15, 20, 26, 30, 31, 32, 33, 35, 36];
+        const MALE = [1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 21, 22, 23, 24, 25, 27, 28, 29, 34];
+
+        // ==================== STATE ====================
+        let currentMode = 'tanpa';
+        let ketuaList = [];
+
+        // ==================== HELPERS ====================
+        function getGender(no) {
+            if (FEMALE.includes(no)) return 'female';
+            if (MALE.includes(no)) return 'male';
+            return null;
+        }
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // ==================== MODE ====================
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            document.querySelector(`.mode-btn[data-mode="${mode}"]`).classList.add('active');
+
+            document.getElementById('modeTanpa').classList.toggle('hidden', mode !== 'tanpa');
+            document.getElementById('modeDengan').classList.toggle('hidden', mode !== 'dengan');
+        }
+
+        // ==================== MODE: TANPA KETUA ====================
+        function spinTanpaKetua() {
+            const total = parseInt(document.getElementById('tanpaJumlah').value) || 9;
+            if (total < 2 || total > 36) {
+                alert('Jumlah kelompok 2-36');
+                return;
+            }
+
+            // Acak semua siswa
+            const shuffled = shuffle([...ALL]);
+            const groups = Array.from({ length: total }, () => []);
+
+            // Bagikan secara bergantian
+            shuffled.forEach((no, i) => {
+                groups[i % total].push(no);
+            });
+
+            // Urutkan
+            groups.forEach(g => g.sort((a, b) => a - b));
+
+            tampilkanHasil(groups, 'tanpaHasil', 'Tanpa Ketua');
+        }
+
+        // ==================== MODE: DENGAN KETUA ====================
+        function tambahKetua() {
+            const absen = parseInt(document.getElementById('inputAbsen').value);
+            const gender = document.getElementById('inputGender').value;
+            const kelompok = parseInt(document.getElementById('inputKelompok').value);
+            const total = parseInt(document.getElementById('denganJumlah').value) || 9;
+
+            // Validasi
+            if (!absen || absen < 1 || absen > 36) {
+                alert('No. absen 1-36');
+                return;
+            }
+            if (!kelompok || kelompok < 1 || kelompok > total) {
+                alert(`Kelompok 1-${total}`);
+                return;
+            }
+            if (ketuaList.find(k => k.absen === absen)) {
+                alert(`No. ${absen} sudah jadi ketua!`);
+                return;
+            }
+            if (ketuaList.find(k => k.kelompok === kelompok)) {
+                alert(`Kelompok ${kelompok} sudah punya ketua!`);
+                return;
+            }
+            const actualGender = getGender(absen);
+            if (!actualGender) {
+                alert(`No. ${absen} tidak valid!`);
+                return;
+            }
+
+            ketuaList.push({ absen, gender, kelompok });
+            document.getElementById('inputAbsen').value = '';
+            document.getElementById('inputKelompok').value = '';
+            renderKetua();
+        }
+
+        function hapusKetua(absen) {
+            ketuaList = ketuaList.filter(k => k.absen !== absen);
+            renderKetua();
+        }
+
+        function hapusSemuaKetua() {
+            if (ketuaList.length === 0) return;
+            if (!confirm('Hapus semua ketua?')) return;
+            ketuaList = [];
+            renderKetua();
+        }
+
+        function isiOtomatis() {
+            if (ketuaList.length > 0) {
+                if (!confirm('Hapus ketua yang ada dan isi otomatis?')) return;
+            }
+            ketuaList = [];
+            // 3 cewe: 6,8,15 ke kelompok 2,3,4
+            // 6 cowo: 1,2,3,4,5,7 ke kelompok 1,5,6,7,8,9
+            const contoh = [
+                { absen: 6, gender: 'female', kelompok: 2 },
+                { absen: 8, gender: 'female', kelompok: 3 },
+                { absen: 15, gender: 'female', kelompok: 4 },
+                { absen: 1, gender: 'male', kelompok: 1 },
+                { absen: 2, gender: 'male', kelompok: 5 },
+                { absen: 3, gender: 'male', kelompok: 6 },
+                { absen: 4, gender: 'male', kelompok: 7 },
+                { absen: 5, gender: 'male', kelompok: 8 },
+                { absen: 7, gender: 'male', kelompok: 9 }
+            ];
+            ketuaList = contoh;
+            renderKetua();
+        }
+
+        function renderKetua() {
+            const total = parseInt(document.getElementById('denganJumlah').value) || 9;
+            const container = document.getElementById('ketuaList');
+            const progress = document.getElementById('ketuaProgress');
+            const info = document.getElementById('ketuaInfo');
+            const spinBtn = document.getElementById('spinDenganBtn');
+
+            progress.textContent = `${ketuaList.length}/${total}`;
+
+            if (ketuaList.length === 0) {
+                container.innerHTML = '';
+                info.textContent = 'Belum ada ketua. Input 9 ketua untuk semua kelompok.';
+                spinBtn.disabled = true;
+                return;
+            }
+
+            // Urutkan berdasarkan kelompok
+            const sorted = [...ketuaList].sort((a, b) => a.kelompok - b.kelompok);
+
+            container.innerHTML = sorted.map(k => `
+                <div class="ketua-item">
+                    <span>${k.gender === 'female' ? '👩' : '👨'}</span>
+                    <span>No.${k.absen}</span>
+                    <span style="font-size:0.7rem; color:#718096;">Kel ${k.kelompok}</span>
+                    <button class="remove-btn" onclick="hapusKetua(${k.absen})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            // Cek semua kelompok terisi?
+            const kelompokTerisi = ketuaList.map(k => k.kelompok);
+            const semuaTerisi = kelompokTerisi.length === total && 
+                [...Array(total)].every((_, i) => kelompokTerisi.includes(i + 1));
+
+            if (semuaTerisi) {
+                info.textContent = `✅ Semua ${total} kelompok sudah punya ketua!`;
+                spinBtn.disabled = false;
+            } else {
+                const kosong = [...Array(total)].map((_, i) => i + 1).filter(k => !kelompokTerisi.includes(k));
+                info.textContent = `⏳ Kelompok tanpa ketua: ${kosong.join(', ')} (${ketuaList.length}/${total})`;
+                spinBtn.disabled = true;
+            }
+        }
+
+        // ==================== SPIN DENGAN KETUA ====================
+        function spinDenganKetua() {
+            const total = parseInt(document.getElementById('denganJumlah').value) || 9;
+
+            // Validasi semua kelompok ada ketua
+            const terisi = ketuaList.map(k => k.kelompok);
+            for (let i = 1; i <= total; i++) {
+                if (!terisi.includes(i)) {
+                    alert(`Kelompok ${i} belum punya ketua!`);
+                    return;
+                }
+            }
+
+            // Buat kelompok dengan ketua
+            let groups = Array.from({ length: total }, (_, i) => {
+                const ketua = ketuaList.find(k => k.kelompok === i + 1);
+                return {
+                    members: ketua ? [{ number: ketua.absen, gender: ketua.gender, isKetua: true }] : [],
+                    ketua: ketua
+                };
+            });
+
+            // Ambil semua siswa yang TIDAK jadi ketua
+            const ketuaAbsen = ketuaList.map(k => k.absen);
+            let remaining = ALL.filter(no => !ketuaAbsen.includes(no));
+
+            // Pisahkan sisa berdasarkan gender
+            let remainingFemale = remaining.filter(no => FEMALE.includes(no));
+            let remainingMale = remaining.filter(no => MALE.includes(no));
+
+            // ===== ATURAN DISTRIBUSI CEWE =====
+            // 1. Cari kelompok yang belum punya cewe (0 cewe)
+            let groupsWithNoFemale = groups.map((g, i) => ({
+                index: i,
+                hasFemale: g.members.some(m => m.gender === 'female')
+            })).filter(g => !g.hasFemale);
+
+            // 2. Prioritaskan kelompok tanpa cewe untuk dapat 1 cewe
+            let femaleToDistribute = [...remainingFemale];
+            let femaleUsed = [];
+
+            // Acak urutan kelompok tanpa cewe
+            shuffle(groupsWithNoFemale);
+
+            // Berikan 1 cewe ke setiap kelompok tanpa cewe
+            for (let g of groupsWithNoFemale) {
+                if (femaleToDistribute.length === 0) break;
+                const cewe = femaleToDistribute.shift();
+                groups[g.index].members.push({
+                    number: cewe,
+                    gender: 'female',
+                    isKetua: false
+                });
+                femaleUsed.push(cewe);
+            }
+
+            // 3. Sisa cewe (2 cewe) diacak ke kelompok MANA PUN
+            // Tapi maksimal 2 cewe per kelompok
+            const remainingFemaleAfter = femaleToDistribute;
+
+            // Buat daftar kelompok yang masih bisa dapat cewe (cewe < 2)
+            let availableGroups = groups.map((g, i) => ({
+                index: i,
+                femaleCount: g.members.filter(m => m.gender === 'female').length
+            })).filter(g => g.femaleCount < 2);
+
+            // Acak urutan kelompok
+            shuffle(availableGroups);
+
+            // Distribusikan sisa cewe
+            for (let cewe of remainingFemaleAfter) {
+                if (availableGroups.length === 0) break;
+                const g = availableGroups.shift();
+                groups[g.index].members.push({
+                    number: cewe,
+                    gender: 'female',
+                    isKetua: false
+                });
+                // Update femaleCount
+                g.femaleCount++;
+                if (g.femaleCount < 2) {
+                    availableGroups.push(g);
+                    shuffle(availableGroups);
+                }
+            }
+              
+            // 4. Sisa cowo diacak ke kelompok
+            let remainingMaleAfter = remaining.filter(no => !femaleUsed.includes(no) && MALE.includes(no));
+            shuffle(remainingMaleAfter);
+
+            for (let cowo of remainingMaleAfter) {
+                // Cari kelompok dengan anggota paling sedikit
+                let minIndex = 0;
+                let minCount = groups[0].members.length;
+                for (let i = 1; i < groups.length; i++) {
+                    if (groups[i].members.length < minCount) {
+                        minCount = groups[i].members.length;
+                        minIndex = i;
+                    }
+                }
+                groups[minIndex].members.push({
+                    number: cowo,
+                    gender: 'male',
+                    isKetua: false
+                });
+            }
+
+            // Urutkan anggota per kelompok
+            groups.forEach(g => {
+                g.members.sort((a, b) => a.number - b.number);
+            });
+
+            tampilkanHasil(groups, 'denganHasil', 'Dengan Ketua');
+        }
+
+        // ==================== TAMPILKAN HASIL ====================
+        function tampilkanHasil(groups, containerId, mode) {
+            const container = document.getElementById(containerId);
+            let html = '';
+
+            // Statistik
+            let totalMembers = 0;
+            let totalFemale = 0;
+            let totalMale = 0;
+            groups.forEach(g => {
+                totalMembers += g.members.length;
+                totalFemale += g.members.filter(m => m.gender === 'female').length;
+                totalMale += g.members.filter(m => m.gender === 'male').length;
+            });
+
+            html += `
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <div class="stat-number">${groups.length}</div>
+                        <div class="stat-label">Kelompok</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${totalMembers}</div>
+                        <div class="stat-label">Total Anggota</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-number">${(totalMembers / groups.length).toFixed(1)}</div>
+                        <div class="stat-label">Rata-rata</div>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    👩 ${totalFemale} cewe | 👨 ${totalMale} cowo | ${mode}
+                </div>
+            `;
+
+            groups.forEach((group, index) => {
+                const femaleCount = group.members.filter(m => m.gender === 'female').length;
+                const maleCount = group.members.filter(m => m.gender === 'male').length;
+                const ketuaCount = group.members.filter(m => m.isKetua).length;
+
+                html += `
+                    <div class="group-card">
+                        <div class="group-header">
+                            <span>Kelompok ${index + 1}</span>
+                            <span class="group-stats">
+                                <span>${group.members.length} org</span>
+                                <span>👩 ${femaleCount}</span>
+                                <span>👨 ${maleCount}</span>
+                                ${ketuaCount > 0 ? `<span>👑 ${ketuaCount}</span>` : ''}
+                            </span>
+                        </div>
+                        <div class="group-body">
+                            ${group.members.map(m => `
+                                <span class="member-chip ${m.gender} ${m.isKetua ? 'ketua' : ''}">
+                                    ${m.isKetua ? '👑' : (m.gender === 'female' ? '👩' : '👨')}
+                                    ${m.number}
+                                    ${m.isKetua ? '<span class="ketua-badge">KETUA</span>' : ''}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default mode
+            setMode('tanpa');
+            renderKetua();
+
+            // Event: ketika jumlah kelompok berubah di mode dengan ketua
+            document.getElementById('denganJumlah').addEventListener('change', function() {
+                renderKetua();
+            });
+
+            // Event: enter key
+            document.getElementById('inputAbsen').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('inputKelompok').focus();
+                }
+            });
+            document.getElementById('inputKelompok').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    tambahKetua();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
